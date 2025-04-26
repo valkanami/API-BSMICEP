@@ -100,7 +100,7 @@ class PolEnCana {
       throw error;
     }
   }
-  // Puedes agregar más métodos como update, delete, etc.
+
 }
 
 module.exports = PolEnCana;

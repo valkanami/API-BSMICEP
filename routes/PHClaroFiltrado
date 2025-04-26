@@ -1,0 +1,120 @@
+const express = require('express');
+const router = express.Router();
+const PHClaroFiltrado = require('../models/PHClaroFiltrado');
+
+
+router.get('/', async (req, res) => {
+  try {
+    const data = await PHClaroFiltrado.getAll();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+router.get('/latest', async (req, res) => {
+  try {
+    const data = await PHClaroFiltrado.getLatest();
+    if (!data) {
+      return res.status(404).json({ message: 'No hay registros disponibles' });
+    }
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+router.get('/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    
+    const data = await PHClaroFiltrado.getById(id);
+    if (!data) {
+      return res.status(404).json({ message: 'Registro no encontrado' });
+    }
+    
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+router.get('/range/:startDate/:endDate', async (req, res) => {
+  try {
+    const startDate = new Date(req.params.startDate);
+    const endDate = new Date(req.params.endDate);
+    
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return res.status(400).json({ error: 'Formato de fecha inválido. Use YYYY-MM-DD' });
+    }
+    
+    const data = await PHClaroFiltrado.getByDateRange(startDate, endDate);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+router.post('/', async (req, res) => {
+  try {
+    
+    const { PHClaro, PHFiltrado } = req.body;
+    if (PHClaro === undefined || PHFiltrado === undefined) {
+      return res.status(400).json({ error: 'Se requieren los campos PHClaro y PHFiltrado' });
+    }
+    
+    const result = await PHClaroFiltrado.create(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+router.put('/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    
+    const result = await PHClaroFiltrado.update(id, req.body);
+    
+    if (!result.success) {
+      return res.status(404).json(result);
+    }
+    
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'ID inválido' });
+    }
+    
+    const result = await PHClaroFiltrado.delete(id);
+    
+    if (!result.success) {
+      return res.status(404).json(result);
+    }
+    
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;

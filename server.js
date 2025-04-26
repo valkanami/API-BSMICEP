@@ -2,26 +2,39 @@ const express = require('express');
 const cors = require('cors');
 const { connectToDatabase } = require('./models/database');
 const polEnCanaRoutes = require('./routes/polEnCana');
+const dextranasBrixRoutes = require('./routes/dextranasBrix');
+const phClaroFiltradoRoutes = require('./routes/PHClaroFiltrado');
+const perdidasCosechamientoRoutes = require('./routes/PerdidasCosechamiento');
+const reporteCosechaRoutes = require('./routes/ReporteCosecha');
+const canaMolidaRoutes = require('./routes/CanaMolida');
+const weatherRoutes = require('./routes/weather');
 
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Rutas
-app.use('/api/polencana', polEnCanaRoutes);
 
-// Iniciar servidor
+app.use('/api/polencana', polEnCanaRoutes);
+app.use('/api/dextranasbrix', dextranasBrixRoutes);
+app.use('/api/phclarofiltrado', phClaroFiltradoRoutes);
+app.use('/api/perdidascosechamiento', perdidasCosechamientoRoutes);
+app.use('/api/reportecosecha', reporteCosechaRoutes);
+app.use('/api/canamolida', canaMolidaRoutes);
+app.use('/api/weather', weatherRoutes);
+
+
+app.get('/', (req, res) => {
+  res.send('API del servidor funcionando correctamente');
+});
+
 async function startServer() {
   try {
-    // Conectar a la base de datos
     await connectToDatabase();
     
-    // Iniciar el servidor
     app.listen(PORT, () => {
       console.log(`Servidor corriendo en http://localhost:${PORT}`);
     });

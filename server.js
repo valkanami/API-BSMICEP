@@ -8,6 +8,7 @@ const perdidasCosechamientoRoutes = require('./routes/PerdidasCosechamiento');
 const reporteCosechaRoutes = require('./routes/ReporteCosecha');
 const canaMolidaRoutes = require('./routes/CanaMolida');
 const weatherRoutes = require('./routes/weather');
+const setupDynamicRoutes = require('./routes/routes'); 
 
 require('dotenv').config();
 
@@ -25,6 +26,9 @@ app.use('/api/perdidascosechamiento', perdidasCosechamientoRoutes);
 app.use('/api/reportecosecha', reporteCosechaRoutes);
 app.use('/api/canamolida', canaMolidaRoutes);
 app.use('/api/weather', weatherRoutes);
+
+
+setupDynamicRoutes(app);
 
 
 app.get('/', (req, res) => {

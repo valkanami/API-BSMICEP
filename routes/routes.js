@@ -33,6 +33,31 @@ function createRouter(model) {
     }
   });
 
+  // Nuevo endpoint para obtener datos por ID
+  router.get('/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ 
+          message: 'El ID debe ser un número válido' 
+        });
+      }
+      
+      const data = await model.getById(id);
+      
+      if (!data) {
+        return res.status(404).json({ 
+          message: `No se encontró ningún registro con el ID ${id}` 
+        });
+      }
+      
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   return router;
 }
 
@@ -62,6 +87,7 @@ const setupRoutes = (app) => {
         entity: key,
         endpoints: {
           getAll: `/api/${routePath}`,
+          getById: `/api/${routePath}/{id}`,
           getByDateRange: `/api/${routePath}/por-fecha?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD`
         }
       };

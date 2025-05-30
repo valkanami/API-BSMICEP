@@ -101,7 +101,7 @@ const tables = [
   'Cana_molida_produccion$',
   'Cana_molidas$',
   'Cachaza_caña$',
-  'Bx_pza_miel_final_$',
+  'Bx_pza_miel_final$',
   'Brix_Meladura$',
   'Bagazo$'
 ];

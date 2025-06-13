@@ -19,7 +19,7 @@ class BaseModel {
     try {
       const query = `
         SELECT * FROM [${this.tableName}]
-        WHERE [FECHA] BETWEEN @startDate AND @endDate
+        WHERE [fecha] BETWEEN @startDate AND @endDate
       `;
       
       const request = new sql.Request();
@@ -51,11 +51,124 @@ class BaseModel {
       throw error;
     }
   }
+
+  // Nueva función para obtener datos por apartado
+  async getByApartado(apartado) {
+    try {
+      const query = `
+        SELECT * FROM [${this.tableName}]
+        WHERE [apartado] = @apartado
+      `;
+      
+      const request = new sql.Request();
+      request.input('apartado', sql.VarChar, apartado);
+      
+      const result = await request.query(query);
+      return result.recordset;
+    } catch (error) {
+      console.error(`Error al obtener datos por apartado de ${this.tableName}:`, error);
+      throw error;
+    }
+  }
+
+  // Función adicional para obtener datos por apartado y rango de fechas
+  async getByApartadoAndDateRange(apartado, startDate, endDate) {
+    try {
+      const query = `
+        SELECT * FROM [${this.tableName}]
+        WHERE [apartado] = @apartado 
+        AND [fecha] BETWEEN @startDate AND @endDate
+      `;
+      
+      const request = new sql.Request();
+      request.input('apartado', sql.VarChar, apartado);
+      request.input('startDate', sql.DateTime, startDate);
+      request.input('endDate', sql.DateTime, endDate);
+      
+      const result = await request.query(query);
+      return result.recordset;
+    } catch (error) {
+      console.error(`Error al obtener datos por apartado y rango de fechas de ${this.tableName}:`, error);
+      throw error;
+    }
+  }
+
+  // Función para obtener todos los apartados únicos
+  async getApartados() {
+    try {
+      const query = `
+        SELECT DISTINCT [apartado] FROM [${this.tableName}]
+        WHERE [apartado] IS NOT NULL
+        ORDER BY [apartado]
+      `;
+      
+      const result = await sql.query(query);
+      return result.recordset.map(row => row.apartado);
+    } catch (error) {
+      console.error(`Error al obtener apartados de ${this.tableName}:`, error);
+      throw error;
+    }
+  }
+
+  // Función para obtener datos por apartado y dato específico
+  async getByApartadoAndDato(apartado, dato) {
+    try {
+      const query = `
+        SELECT * FROM [${this.tableName}]
+        WHERE [apartado] = @apartado 
+        AND [dato] = @dato
+      `;
+      
+      const request = new sql.Request();
+      request.input('apartado', sql.VarChar, apartado);
+      request.input('dato', sql.VarChar, dato);
+      
+      const result = await request.query(query);
+      return result.recordset;
+    } catch (error) {
+      console.error(`Error al obtener datos por apartado y dato de ${this.tableName}:`, error);
+      throw error;
+    }
+  }
+
+  // Función para obtener todos los tipos de datos únicos
+  async getDatos() {
+    try {
+      const query = `
+        SELECT DISTINCT [dato] FROM [${this.tableName}]
+        WHERE [dato] IS NOT NULL
+        ORDER BY [dato]
+      `;
+      
+      const result = await sql.query(query);
+      return result.recordset.map(row => row.dato);
+    } catch (error) {
+      console.error(`Error al obtener datos de ${this.tableName}:`, error);
+      throw error;
+    }
+  }
+
+  // Función para obtener datos por zafra
+  async getByZafra(zafra) {
+    try {
+      const query = `
+        SELECT * FROM [${this.tableName}]
+        WHERE [zafra] = @zafra
+      `;
+      
+      const request = new sql.Request();
+      request.input('zafra', sql.VarChar, zafra);
+      
+      const result = await request.query(query);
+      return result.recordset;
+    } catch (error) {
+      console.error(`Error al obtener datos por zafra de ${this.tableName}:`, error);
+      throw error;
+    }
+  }
 }
 
-
 const models = {};
-
 
 const tables = [
   'Vapor_TN$',
@@ -103,16 +216,16 @@ const tables = [
   'Cachaza_caña$',
   'Bx_pza_miel_final$',
   'Brix_Meladura$',
-  'Bagazo$'
+  'Bagazo$',
+  'RegistroZafra'
 ];
-
 
 tables.forEach(tableName => {
   const key = tableName
-    .replace(/\$/g, '')  
-    .replace(/_/g, '')   
-    .toLowerCase();      
-  
+    .replace(/\$/g, '')
+    .replace(/_/g, '')
+    .toLowerCase();
+    
   models[key] = new BaseModel(tableName);
 });
 

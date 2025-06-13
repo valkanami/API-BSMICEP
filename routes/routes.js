@@ -1,11 +1,10 @@
 const express = require('express');
 const models = require('../models/models');
 
-
 function createRouter(model) {
   const router = express.Router();
 
-  
+  // Obtener todos los datos
   router.get('/', async (req, res) => {
     try {
       const data = await model.getAll();
@@ -15,7 +14,7 @@ function createRouter(model) {
     }
   });
 
-  
+  // Obtener datos por rango de fechas
   router.get('/por-fecha', async (req, res) => {
     try {
       const { startDate, endDate } = req.query;
@@ -33,7 +32,110 @@ function createRouter(model) {
     }
   });
 
-  // Nuevo endpoint para obtener datos por ID
+  // Nuevo endpoint para obtener datos por apartado
+  router.get('/por-apartado/:apartado', async (req, res) => {
+    try {
+      const { apartado } = req.params;
+      
+      if (!apartado) {
+        return res.status(400).json({ 
+          message: 'Se requiere el parámetro apartado' 
+        });
+      }
+      
+      const data = await model.getByApartado(apartado);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Endpoint para obtener datos por apartado y rango de fechas
+  router.get('/por-apartado/:apartado/fecha', async (req, res) => {
+    try {
+      const { apartado } = req.params;
+      const { startDate, endDate } = req.query;
+      
+      if (!apartado) {
+        return res.status(400).json({ 
+          message: 'Se requiere el parámetro apartado' 
+        });
+      }
+      
+      if (!startDate || !endDate) {
+        return res.status(400).json({ 
+          message: 'Se requieren los parámetros startDate y endDate' 
+        });
+      }
+      
+      const data = await model.getByApartadoAndDateRange(
+        apartado, 
+        new Date(startDate), 
+        new Date(endDate)
+      );
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Endpoint para obtener todos los apartados disponibles
+  router.get('/apartados', async (req, res) => {
+    try {
+      const apartados = await model.getApartados();
+      res.json(apartados);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Endpoint para obtener datos por apartado y dato específico
+  router.get('/por-apartado/:apartado/dato/:dato', async (req, res) => {
+    try {
+      const { apartado, dato } = req.params;
+      
+      if (!apartado || !dato) {
+        return res.status(400).json({ 
+          message: 'Se requieren los parámetros apartado y dato' 
+        });
+      }
+      
+      const data = await model.getByApartadoAndDato(apartado, dato);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Endpoint para obtener todos los tipos de datos disponibles
+  router.get('/datos', async (req, res) => {
+    try {
+      const datos = await model.getDatos();
+      res.json(datos);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Endpoint para obtener datos por zafra
+  router.get('/por-zafra/:zafra', async (req, res) => {
+    try {
+      const { zafra } = req.params;
+      
+      if (!zafra) {
+        return res.status(400).json({ 
+          message: 'Se requiere el parámetro zafra' 
+        });
+      }
+      
+      const data = await model.getByZafra(zafra);
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Obtener datos por ID
   router.get('/:id', async (req, res) => {
     try {
       const id = parseInt(req.params.id);
@@ -61,34 +163,37 @@ function createRouter(model) {
   return router;
 }
 
-
 const setupRoutes = (app) => {
- 
   Object.entries(models).forEach(([key, model]) => {
-    
     const routePath = key
-      .replace(/([A-Z])/g, '-$1')     
-      .replace(/^-/, '')              
-      .toLowerCase();                 
-    
+      .replace(/([A-Z])/g, '-$1')
+      .replace(/^-/, '')
+      .toLowerCase();
+      
     app.use(`/api/${routePath}`, createRouter(model));
     console.log(`Ruta registrada: /api/${routePath}`);
   });
 
-  
+  // Endpoint principal con documentación
   app.get('/api', (req, res) => {
     const endpoints = Object.keys(models).map(key => {
       const routePath = key
         .replace(/([A-Z])/g, '-$1')
         .replace(/^-/, '')
         .toLowerCase();
-      
+        
       return {
         entity: key,
         endpoints: {
           getAll: `/api/${routePath}`,
           getById: `/api/${routePath}/{id}`,
-          getByDateRange: `/api/${routePath}/por-fecha?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD`
+          getByDateRange: `/api/${routePath}/por-fecha?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD`,
+          getByApartado: `/api/${routePath}/por-apartado/{apartado}`,
+          getByApartadoAndDate: `/api/${routePath}/por-apartado/{apartado}/fecha?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD`,
+          getByApartadoAndDato: `/api/${routePath}/por-apartado/{apartado}/dato/{dato}`,
+          getByZafra: `/api/${routePath}/por-zafra/{zafra}`,
+          getApartados: `/api/${routePath}/apartados`,
+          getDatos: `/api/${routePath}/datos`
         }
       };
     });

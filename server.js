@@ -1,12 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { connectToDatabase } = require('./models/database');
-const polEnCanaRoutes = require('./routes/polEnCana');
-const dextranasBrixRoutes = require('./routes/dextranasBrix');
-const phClaroFiltradoRoutes = require('./routes/PHClaroFiltrado');
-const perdidasCosechamientoRoutes = require('./routes/PerdidasCosechamiento');
-const reporteCosechaRoutes = require('./routes/ReporteCosecha');
-const canaMolidaRoutes = require('./routes/CanaMolida');
+
 const weatherRoutes = require('./routes/weather');
 const setupDynamicRoutes = require('./routes/routes'); 
 
@@ -19,12 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 
-app.use('/api/polencana', polEnCanaRoutes);
-app.use('/api/dextranasbrix', dextranasBrixRoutes);
-app.use('/api/phclarofiltrado', phClaroFiltradoRoutes);
-app.use('/api/perdidascosechamiento', perdidasCosechamientoRoutes);
-app.use('/api/reportecosecha', reporteCosechaRoutes);
-app.use('/api/canamolida', canaMolidaRoutes);
+
 app.use('/api/weather', weatherRoutes);
 
 

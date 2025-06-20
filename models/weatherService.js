@@ -3,7 +3,7 @@ const axios = require('axios');
 class WeatherService {
   static async getCurrentWeather(city) {
     try {
-      // Obtener el clima actual
+      
       const currentResponse = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
         params: {
           q: `${city},mx`,
@@ -13,7 +13,7 @@ class WeatherService {
         }
       });
       
-      // Obtener el pronóstico para los periodos del día
+      
       const forecastResponse = await axios.get(`https://api.openweathermap.org/data/2.5/forecast`, {
         params: {
           q: `${city},mx`,
@@ -23,7 +23,6 @@ class WeatherService {
         }
       });
       
-      // Procesar el clima actual
       const currentWeather = {
         city: currentResponse.data.name,
         country: currentResponse.data.sys.country,
@@ -37,11 +36,11 @@ class WeatherService {
         timestamp: new Date(currentResponse.data.dt * 1000)
       };
       
-      // Procesar los periodos del día
+      
       const today = new Date().toISOString().split('T')[0];
       const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
       
-      // Definir los periodos del día (hora local)
+      
       const periods = {
         madrugada: { start: 0, end: 5 },
         mañana: { start: 6, end: 11 },
@@ -49,7 +48,7 @@ class WeatherService {
         noche: { start: 18, end: 23 }
       };
       
-      // Inicializar los datos de los periodos
+      
       const dailyPeriods = {
         madrugada: null,
         mañana: null,
@@ -57,16 +56,16 @@ class WeatherService {
         noche: null
       };
       
-      // Procesar el pronóstico para asignarlo a los periodos correspondientes
+      
       forecastResponse.data.list.forEach(item => {
         const date = new Date(item.dt * 1000);
         const forecastDay = date.toISOString().split('T')[0];
         const hour = date.getHours();
         
-        // Solo considerar datos para hoy y mañana
+        
         if (forecastDay !== today && forecastDay !== tomorrow) return;
         
-        // Determinar a qué periodo pertenece esta hora
+        
         let periodName = null;
         for (const [name, period] of Object.entries(periods)) {
           if (hour >= period.start && hour <= period.end) {
@@ -77,7 +76,7 @@ class WeatherService {
         
         if (!periodName) return;
         
-        // Solo asignar datos a periodos que no tengan datos aún
+        
         if (!dailyPeriods[periodName]) {
           dailyPeriods[periodName] = {
             temperature: parseFloat(item.main.temp.toFixed(1)),
@@ -91,7 +90,7 @@ class WeatherService {
         }
       });
       
-      // Combinar el clima actual con los periodos del día
+      
       return {
         ...currentWeather,
         periodos: dailyPeriods

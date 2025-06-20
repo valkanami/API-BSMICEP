@@ -52,7 +52,7 @@ class BaseModel {
     }
   }
 
-  // Nueva función para obtener datos por apartado
+  
   async getByApartado(apartado) {
     try {
       const query = `
@@ -71,7 +71,7 @@ class BaseModel {
     }
   }
 
-  // Función adicional para obtener datos por apartado y rango de fechas
+  
   async getByApartadoAndDateRange(apartado, startDate, endDate) {
     try {
       const query = `
@@ -93,7 +93,7 @@ class BaseModel {
     }
   }
 
-  // Función para obtener todos los apartados únicos
+  
   async getApartados() {
     try {
       const query = `
@@ -110,7 +110,7 @@ class BaseModel {
     }
   }
 
-  // Función para obtener datos por apartado y dato específico
+  
   async getByApartadoAndDato(apartado, dato) {
     try {
       const query = `
@@ -131,7 +131,7 @@ class BaseModel {
     }
   }
 
-  // Función para obtener todos los tipos de datos únicos
+  
   async getDatos() {
     try {
       const query = `
@@ -148,7 +148,7 @@ class BaseModel {
     }
   }
 
-  // Función para obtener datos por zafra
+  
   async getByZafra(zafra) {
     try {
       const query = `

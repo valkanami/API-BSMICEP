@@ -4,7 +4,7 @@ const models = require('../models/models');
 function createRouter(model) {
   const router = express.Router();
 
-  // Obtener todos los datos
+  
   router.get('/', async (req, res) => {
     try {
       const data = await model.getAll();
@@ -14,7 +14,7 @@ function createRouter(model) {
     }
   });
 
-  // Obtener datos por rango de fechas
+  
   router.get('/por-fecha', async (req, res) => {
     try {
       const { startDate, endDate } = req.query;
@@ -32,7 +32,7 @@ function createRouter(model) {
     }
   });
 
-  // Nuevo endpoint para obtener datos por apartado
+  
   router.get('/por-apartado/:apartado', async (req, res) => {
     try {
       const { apartado } = req.params;
@@ -50,7 +50,7 @@ function createRouter(model) {
     }
   });
 
-  // Endpoint para obtener datos por apartado y rango de fechas
+  
   router.get('/por-apartado/:apartado/fecha', async (req, res) => {
     try {
       const { apartado } = req.params;
@@ -79,7 +79,7 @@ function createRouter(model) {
     }
   });
 
-  // Endpoint para obtener todos los apartados disponibles
+  
   router.get('/apartados', async (req, res) => {
     try {
       const apartados = await model.getApartados();
@@ -89,7 +89,7 @@ function createRouter(model) {
     }
   });
 
-  // Endpoint para obtener datos por apartado y dato específico
+  
   router.get('/por-apartado/:apartado/dato/:dato', async (req, res) => {
     try {
       const { apartado, dato } = req.params;
@@ -107,7 +107,7 @@ function createRouter(model) {
     }
   });
 
-  // Endpoint para obtener todos los tipos de datos disponibles
+  
   router.get('/datos', async (req, res) => {
     try {
       const datos = await model.getDatos();
@@ -117,7 +117,7 @@ function createRouter(model) {
     }
   });
 
-  // Endpoint para obtener datos por zafra
+  
   router.get('/por-zafra/:zafra', async (req, res) => {
     try {
       const { zafra } = req.params;
@@ -135,7 +135,7 @@ function createRouter(model) {
     }
   });
 
-  // Obtener datos por ID
+  
   router.get('/:id', async (req, res) => {
     try {
       const id = parseInt(req.params.id);
@@ -174,7 +174,7 @@ const setupRoutes = (app) => {
     console.log(`Ruta registrada: /api/${routePath}`);
   });
 
-  // Endpoint principal con documentación
+  
   app.get('/api', (req, res) => {
     const endpoints = Object.keys(models).map(key => {
       const routePath = key

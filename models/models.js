@@ -217,7 +217,9 @@ const tables = [
   'Bx_pza_miel_final$',
   'Brix_Meladura$',
   'Bagazo$',
-  'RegistroZafra'
+  'RegistroZafra',
+  'Datos_Turno',
+  'Promedios'
 ];
 
 tables.forEach(tableName => {

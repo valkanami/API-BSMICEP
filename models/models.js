@@ -219,7 +219,8 @@ const tables = [
   'Bagazo$',
   'RegistroZafra',
   'Datos_Turno',
-  'Promedios'
+  'Promedios',
+  'DatosSQL'
 ];
 
 tables.forEach(tableName => {

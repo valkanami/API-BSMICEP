@@ -220,7 +220,9 @@ const tables = [
   'RegistroZafra',
   'Datos_Turno',
   'Promedios',
-  'DatosSQL'
+  'DatosSQL',
+  'Datos_Hora',
+  'Datos_Dia'
 ];
 
 tables.forEach(tableName => {

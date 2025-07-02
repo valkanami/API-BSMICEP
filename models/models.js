@@ -192,7 +192,7 @@ const tables = [
   'Perdidas$',
   'Molienda$',
   'Masa_cocida$',
-  'Limites$',
+  'Limites',
   'IMBIBICION$',
   'Humedad_Pol_Bagazo$',
   'Ext_pol_pol_cana$',

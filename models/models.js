@@ -222,7 +222,9 @@ const tables = [
   'Promedios',
   'DatosSQL',
   'Datos_Hora',
-  'Datos_Dia'
+  'Datos_Dia',
+  'Datos_Tablas',
+  'Datos_Cuadros'
 ];
 
 tables.forEach(tableName => {

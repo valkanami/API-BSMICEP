@@ -29,9 +29,10 @@ async function startServer() {
   try {
     await connectToDatabase();
     
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Servidor corriendo en http://localhost:${PORT}`);
     });
+    
   } catch (error) {
     console.error('Error al iniciar el servidor:', error);
   }

@@ -9,12 +9,26 @@
     },
     "dependencies": {
         "axios": "^1.8.4",
+        "bcryptjs": "^3.0.2",
+        "body-parser": "^2.2.0",
         "cors": "^2.8.5",
         "dotenv": "^16.0.3",
         "express": "^4.21.2",
-        "mssql": "^9.1.1"
+        "jsonwebtoken": "^9.0.2",
+        "mssql": "^9.3.2"
     },
     "devDependencies": {
         "nodemon": "^2.0.22"
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/valkanami/API-BSMICEP.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/valkanami/API-BSMICEP/issues"
+    },
+    "homepage": "https://github.com/valkanami/API-BSMICEP#readme"
 }

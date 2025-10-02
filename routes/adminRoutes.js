@@ -51,4 +51,20 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// En tu router de admins
+
+router.post("/register-first", async (req, res) => {
+  try {
+    const admins = await adminModel.getAllAdmins();
+    if (admins.length > 0) {
+      return res.status(403).json({ message: "El primer admin ya fue creado" });
+    }
+    const { nombre, email, password } = req.body;
+    await adminModel.createAdmin({ nombre, email, password });
+    res.status(201).json({ message: "Primer admin creado correctamente" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

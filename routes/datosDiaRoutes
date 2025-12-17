@@ -1,0 +1,27 @@
+const express = require("express");
+const router = express.Router();
+const DatosDia = require("../models/Datos_Dia");
+
+router.get("/datos_dia", async (req, res) => {
+  try {
+    const datos = await DatosDia.findAll();
+    res.json(datos);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+router.post("/datos_dia", async (req, res) => {
+  const nuevo = await DatosDia.create({
+    Zafra: "2025-2026",
+    Fecha: new Date(),
+    Dia: req.body.Dia,
+    Apartado: req.body.Apartado,
+    Dato: req.body.Dato,
+    Valor: req.body.Valor,
+    Justificacion: req.body.Justificacion
+  });
+  res.json(nuevo);
+});
+
+module.exports = router;
